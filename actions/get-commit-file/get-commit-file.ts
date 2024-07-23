@@ -1,5 +1,5 @@
-import core from '@actions/core';
-import github from '@actions/github';
+import * as core from '@actions/core';
+import * as github from '@actions/github';
 import path from 'path';
 
 
@@ -43,10 +43,12 @@ async function run() {
                 throw new Error(`No File`);
             }
         }).catch((err) => {
+            console.log(err);
             core.setFailed(err);
         })
     } catch (error:any) {
-        core.setFailed(error.message);
+        console.log(error)
+        core.setFailed(error);
     }
 }
 run();
