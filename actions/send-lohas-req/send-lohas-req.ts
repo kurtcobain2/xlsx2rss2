@@ -6,6 +6,7 @@ import axios from 'axios';
 
 
 interface WebhookBody {
+    owner: string;
     repo: string;
     artifact_id: number;
     issue_num: string;
@@ -32,6 +33,7 @@ async function run() {
         let token = jwt.sign(payload, JWT_SECRET, { algorithm: "HS256" });
 
         let data:WebhookBody = {
+            owner: github.context.repo.owner,
             repo: github.context.repo.repo,
             artifact_id: parseInt(ARTIFACT_ID),
             issue_num: ISSUE_NUM
@@ -42,9 +44,9 @@ async function run() {
                 'Authorization': `Bearer ${token}`
             }
         }).then((res) => {
-            console.log(res.data);
+            
         }).catch((err) => {
-            console.log(err);
+            
         })
     } catch (error:any) {
         core.setFailed(error);
