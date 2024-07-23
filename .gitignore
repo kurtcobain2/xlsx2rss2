@@ -4,6 +4,7 @@
 
 .vscode/
 dist/
+!actions/*/dist/
 files/
 res/
 
