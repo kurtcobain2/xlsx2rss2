@@ -29,7 +29,7 @@ async function run() {
             iat: timestamp,
             exp: timestamp + 500
         }
-        let token = jwt.sign(payload, JWT_SECRET, { algorithm: "HS256", expiresIn: '500ms' });
+        let token = jwt.sign(payload, JWT_SECRET, { algorithm: "HS256" });
 
         let data:WebhookBody = {
             repo: github.context.repo.repo,

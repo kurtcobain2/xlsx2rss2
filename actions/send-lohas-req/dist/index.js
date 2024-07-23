@@ -37726,7 +37726,7 @@ function run() {
                 iat: timestamp,
                 exp: timestamp + 500
             };
-            let token = jsonwebtoken_1.default.sign(payload, JWT_SECRET, { algorithm: "HS256", expiresIn: '500ms' });
+            let token = jsonwebtoken_1.default.sign(payload, JWT_SECRET, { algorithm: "HS256" });
             let data = {
                 repo: github.context.repo.repo,
                 artifact_id: parseInt(ARTIFACT_ID),
