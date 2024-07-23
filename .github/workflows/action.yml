@@ -2,8 +2,8 @@ name: Excel Upload Workflow
 
 on:
   push:
-    branches:
-      - manager
+    # branches:
+    #   - main
     paths:
       - 'files/*.xlsx'
 
@@ -178,9 +178,13 @@ jobs:
 
       - name: Upload Server
         uses: ./actions/send-lohas-req
-        env:
-          API_URL: ${{ secrets.API_URL }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          artifact-id: ${{ needs.main.outputs.artifact-id }}
+          jwt-secret: ${{ secrets.JWT_SECRET }}
+          issue-number: ${{ needs.main.outputs.issue-number }}
+          api-url: ${{ secrets.API_URL }}
+
 
       # - name: Upload server
       #   env:
