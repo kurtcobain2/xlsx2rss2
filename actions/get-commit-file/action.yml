@@ -1,0 +1,19 @@
+name: 'Get Commit File'
+
+description: 'Get Commit File'
+
+inputs:
+  github-token:
+    description: 'Github token'
+    required: true
+  file-name:
+    description: 'filename filter'
+    required: false
+
+outputs:
+  files:
+    description: 'The name of commit files'
+
+runs:
+  using: 'node16'
+  main: 'get-commit-file.js'

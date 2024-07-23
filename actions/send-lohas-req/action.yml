@@ -1,0 +1,13 @@
+name: 'Send Request'
+
+description: 'Send request to lohas server'
+
+
+
+outputs:
+  success:
+    description: 'boolean string of add comment ("true"/"false")'
+
+runs:
+  using: 'node16'
+  main: 'send-lohas-req.js'

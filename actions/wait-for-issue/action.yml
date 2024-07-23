@@ -1,0 +1,27 @@
+name: 'Wait for Issue Response'
+
+description: 'Waits for a user response on a GitHub issue'
+
+inputs:
+  github-token:
+    description: 'GitHub token'
+    required: true
+  issue-number:
+    description: 'issue number user responsed'
+    required: true
+  interval-wait-time:
+    description: 'interval wait time (ms)'
+    required: false
+    default: "1000"
+  max-try:
+    description: 'max try to read issue'
+    required: false
+    default: "1"
+
+outputs:
+  comment-body:
+    description: 'user comment'
+
+runs:
+  using: 'node16'
+  main: 'wait-for-issue.js'

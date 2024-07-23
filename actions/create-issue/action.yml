@@ -1,0 +1,31 @@
+name: 'Create Github Issue'
+
+description: 'Create new Github Issue'
+
+inputs:
+  github-token:
+    description: 'Github token'
+    required: true
+  issue-title:
+    description: 'Title of the issue'
+    required: true
+  issue-body:
+    description: 'Body of the issue'
+    required: false
+  issue-body-url:
+    description: 'Url of body of the issue (`issue-body-url` param ignore `issue-body` param)'
+    required: false
+  encoding:
+    description: 'File encoding options'
+    required: false
+    default: "utf-8"
+
+outputs:
+  issue-number:
+    description: 'The number of the created issue'
+  issue-url:
+    description: 'The URL of the created issue'
+
+runs:
+  using: 'node16'
+  main: 'create-issue.js'

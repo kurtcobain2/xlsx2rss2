@@ -1,0 +1,29 @@
+name: 'Get Commit File'
+
+description: 'Get Commit File'
+
+inputs:
+  github-token:
+    description: 'Github token'
+    required: true
+  issue-number:
+    description: 'Issue number'
+    required: true
+  comment:
+    description: 'comment'
+    required: true
+  state:
+    description: 'issue state'
+    required: false
+  state-reason:
+    description: 'issue state reason'
+    default: completed
+    required: false
+
+outputs:
+  success:
+    description: 'boolean string of add comment ("true"/"false")'
+
+runs:
+  using: 'node16'
+  main: 'add-issue-comment.js'
