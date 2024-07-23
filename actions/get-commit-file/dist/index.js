@@ -29193,6 +29193,29 @@ function wrappy (fn, cb) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -29206,22 +29229,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __importDefault(__nccwpck_require__(2121));
-const github_1 = __importDefault(__nccwpck_require__(7249));
+const core = __importStar(__nccwpck_require__(2121));
+const github = __importStar(__nccwpck_require__(7249));
 const path_1 = __importDefault(__nccwpck_require__(1017));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const TOKEN = core_1.default.getInput('github-token');
-            const octokit = github_1.default.getOctokit(TOKEN);
-            const FILENAME = core_1.default.getInput('file-name') || "";
+            const TOKEN = core.getInput('github-token');
+            const octokit = github.getOctokit(TOKEN);
+            const FILENAME = core.getInput('file-name') || "";
             octokit.rest.repos.getCommit({
-                owner: github_1.default.context.repo.owner,
-                repo: github_1.default.context.repo.repo,
-                ref: github_1.default.context.sha
+                owner: github.context.repo.owner,
+                repo: github.context.repo.repo,
+                ref: github.context.sha
             }).then((res) => {
                 if (res.data.files) {
-                    core_1.default.setOutput('files', res.data.files
+                    core.setOutput('files', res.data.files
                         .map((v) => {
                         if (FILENAME.length > 0) {
                             let filenameReg = new RegExp(`^${FILENAME.replace(/\*/g, '.+')}$`);
@@ -29245,11 +29268,13 @@ function run() {
                     throw new Error(`No File`);
                 }
             }).catch((err) => {
-                core_1.default.setFailed(err);
+                console.log(err);
+                core.setFailed(err);
             });
         }
         catch (error) {
-            core_1.default.setFailed(error.message);
+            console.log(error);
+            core.setFailed(error);
         }
     });
 }

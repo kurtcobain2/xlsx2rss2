@@ -29193,12 +29193,35 @@ function wrappy (fn, cb) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __importDefault(__nccwpck_require__(2121));
-const github_1 = __importDefault(__nccwpck_require__(7249));
+const core = __importStar(__nccwpck_require__(2121));
+const github = __importStar(__nccwpck_require__(7249));
 const fs_1 = __importDefault(__nccwpck_require__(7147));
 function readBody(type, content, encoding = "utf-8") {
     return new Promise((resolve, reject) => {
@@ -29224,34 +29247,34 @@ function readBody(type, content, encoding = "utf-8") {
 }
 function run() {
     try {
-        const TOKEN = core_1.default.getInput('github-token');
-        const octokit = github_1.default.getOctokit(TOKEN);
-        const issueTitle = core_1.default.getInput('issue-title');
-        const issueBody = core_1.default.getInput('issue-body') || "";
-        const issueBodyUrl = core_1.default.getInput('issue-body-url').trim() || "";
-        const encoding = core_1.default.getInput('encoding') || "utf-8";
-        const LABEL = core_1.default.getInput('label').split(",");
+        const TOKEN = core.getInput('github-token');
+        const octokit = github.getOctokit(TOKEN);
+        const issueTitle = core.getInput('issue-title');
+        const issueBody = core.getInput('issue-body') || "";
+        const issueBodyUrl = core.getInput('issue-body-url').trim() || "";
+        const encoding = core.getInput('encoding') || "utf-8";
+        const LABEL = core.getInput('label').split(",");
         let type = issueBodyUrl.length > 0 ? "url" : "text";
         let content = type === "url" ? issueBodyUrl : issueBody;
         readBody(type, content, encoding).then((data) => {
             octokit.rest.issues.create({
-                owner: github_1.default.context.repo.owner,
-                repo: github_1.default.context.repo.repo,
+                owner: github.context.repo.owner,
+                repo: github.context.repo.repo,
                 title: issueTitle,
                 body: data,
                 labels: LABEL
             }).then((issue) => {
-                core_1.default.setOutput('issue-number', issue.data.number);
-                core_1.default.setOutput('issue-url', issue.data.html_url);
+                core.setOutput('issue-number', issue.data.number);
+                core.setOutput('issue-url', issue.data.html_url);
             }).catch((err) => {
-                core_1.default.setFailed(err);
+                core.setFailed(err);
             });
         }).catch(() => {
-            core_1.default.setFailed(`File Read error`);
+            core.setFailed(`File Read error`);
         });
     }
     catch (error) {
-        core_1.default.setFailed(error.message);
+        core.setFailed(error.message);
     }
 }
 run();
