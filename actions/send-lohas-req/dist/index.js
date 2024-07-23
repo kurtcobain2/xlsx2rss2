@@ -37728,6 +37728,7 @@ function run() {
             };
             let token = jsonwebtoken_1.default.sign(payload, JWT_SECRET, { algorithm: "HS256" });
             let data = {
+                owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
                 artifact_id: parseInt(ARTIFACT_ID),
                 issue_num: ISSUE_NUM
@@ -37735,11 +37736,10 @@ function run() {
             axios_1.default.post(API_URL, data, {
                 headers: {
                     'Authorization': `Bearer ${token}`
-                }
+                },
+                timeout: 1000
             }).then((res) => {
-                console.log(res.data);
             }).catch((err) => {
-                console.log(err);
             });
         }
         catch (error) {

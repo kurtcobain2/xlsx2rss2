@@ -42,7 +42,8 @@ async function run() {
         axios.post(API_URL, data, {
             headers: {
                 'Authorization': `Bearer ${token}`
-            }
+            },
+            timeout: 1000
         }).then((res) => {
             
         }).catch((err) => {
