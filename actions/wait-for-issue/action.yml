@@ -24,4 +24,4 @@ outputs:
 
 runs:
   using: 'node16'
-  main: 'wait-for-issue.js'
+  main: 'dist/index.js'

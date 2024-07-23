@@ -1,4 +1,3 @@
-// const http = require('http');
 import core from '@actions/core';
 import github from '@actions/github';
 import jwt from 'jsonwebtoken';
@@ -10,10 +9,6 @@ interface WebhookBody {
     repo: string;
     artifact_id: number;
     issue_num: string;
-}
-
-function wait(ms:number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function run() {
@@ -51,8 +46,8 @@ async function run() {
         }).catch((err) => {
             console.log(err);
         })
-    } catch (error) {
-        core.setFailed(error.message);
+    } catch (error:any) {
+        core.setFailed(error);
     }
 }
 run();

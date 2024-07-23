@@ -39,7 +39,7 @@ async function run() {
         if (!success) {
             core.setFailed('No response (time over)!');
         }
-    } catch (error) {
+    } catch (error:any) {
         core.setFailed(error.message);
     }
 }

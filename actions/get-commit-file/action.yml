@@ -16,4 +16,4 @@ outputs:
 
 runs:
   using: 'node16'
-  main: 'get-commit-file.js'
+  main: 'dist/index.js'

@@ -2,7 +2,22 @@ name: 'Send Request'
 
 description: 'Send request to lohas server'
 
-
+inputs:
+  github-token:
+    description: 'GitHub token'
+    required: true
+  artifact-id:
+    description: 'Id of artifact'
+    required: true
+  jwt-secret:
+    description: 'jwt secret key'
+    required: true
+  issue-number:
+    description: 'main issue number'
+    required: true
+  api-url:
+    description: 'Webhook API endpoint url'
+    required: true
 
 outputs:
   success:
@@ -10,4 +25,4 @@ outputs:
 
 runs:
   using: 'node16'
-  main: 'send-lohas-req.js'
+  main: 'dist/index.js'

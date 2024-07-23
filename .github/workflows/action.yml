@@ -38,24 +38,24 @@ jobs:
       - name: Install Python Dependancies
         run: pip install -r requirements.txt
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4.0.3
-        with:
-          node-version: 16
+      # - name: Use Node.js
+      #   uses: actions/setup-node@v4.0.3
+      #   with:
+      #     node-version: 16
 
-      - name: Cache node modules
-        uses: actions/cache@v4.0.2
-        id: cache
-        with:
-          path: node_modules
-          key: npm-packages-${{ hashFiles('./actions/package-lock.json') }}
+      # - name: Cache node modules
+      #   uses: actions/cache@v4.0.2
+      #   id: cache
+      #   with:
+      #     path: node_modules
+      #     key: npm-packages-${{ hashFiles('./actions/package-lock.json') }}
 
-      - name: Install Node Dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          cat ./actions/package.json > package.json
-          cat ./actions/package-lock.json > package-lock.json
-          npm ci
+      # - name: Install Node Dependencies
+      #   if: steps.cache.outputs.cache-hit != 'true'
+      #   run: |
+      #     cat ./actions/package.json > package.json
+      #     cat ./actions/package-lock.json > package-lock.json
+      #     npm ci
 
       - name: Get Commit File
         id: commit-file
@@ -129,24 +129,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4.0.3
-        with:
-          node-version: 16
+      # - name: Use Node.js
+      #   uses: actions/setup-node@v4.0.3
+      #   with:
+      #     node-version: 16
 
-      - name: Cache node modules
-        uses: actions/cache@v4.0.2
-        id: cache
-        with:
-          path: node_modules
-          key: npm-packages-${{ hashFiles('./actions/package-lock.json') }}
+      # - name: Cache node modules
+      #   uses: actions/cache@v4.0.2
+      #   id: cache
+      #   with:
+      #     path: node_modules
+      #     key: npm-packages-${{ hashFiles('./actions/package-lock.json') }}
 
-      - name: Install Node Dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          cat ./actions/package.json > package.json
-          cat ./actions/package-lock.json > package-lock.json
-          npm ci
+      # - name: Install Node Dependencies
+      #   if: steps.cache.outputs.cache-hit != 'true'
+      #   run: |
+      #     cat ./actions/package.json > package.json
+      #     cat ./actions/package-lock.json > package-lock.json
+      #     npm ci
 
       - name: Use apt package cache
         uses: actions/cache@v4.0.2
@@ -176,36 +176,42 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y jq
 
-      - name: Upload server
+      - name: Upload Server
+        uses: ./actions/send-lohas-req
         env:
           API_URL: ${{ secrets.API_URL }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        run: |
-          timestamp=$(date +%s)
-          header=$(echo -n '{"alg":"HS256","typ":"JWT"}' | base64 | tr -d '=' | tr '/+' '_-')
-          payload=$(jq -n \
-            --arg sha "${{ github.sha }}" \
-            --arg repo "${{ github.repository }}" \
-            --arg time $timestamp \
-            --arg iat $timestamp \
-            --arg exp $((timestamp + 300)) \
-            '{"sha":$sha,"repository":$repo,"timestamp":$time,"iat":($iat|tonumber),"exp":($exp|tonumber)}' | base64 | tr -d '=' | tr '/+' '_-')
-          signature=$(echo -n "${header}.${payload}" | openssl dgst -binary -sha256 -hmac "${JWT_SECRET}" | base64 | tr -d '=' | tr '/+' '_-')
-          jwt="${header}.${payload}.${signature}"
-          echo "::add-mask::$jwt"
-          echo "::add-mask::$header"
-          echo "::add-mask::$payload"
-          echo "::add-mask::$signature"
 
-          curl -X POST $API_URL \
-            -H "Content-Type: application/json" \
-            -H "Authorization: Bearer $jwt" \
-            -d "$(jq -n \
-              --arg repo "${{ github.repository }}" \
-              --arg artifact_id "${{ needs.main.outputs.artifact-id }}" \
-              --arg artifact_url "${{ needs.main.outputs.artifact-url }}" \
-              --arg issue_num "${{ needs.main.outputs.issue-number }}" \
-              '{"repository":$repo,"artifact_id":$artifact_id,"artifact_url":$artifact_url,"issue_num":$issue_num}')"
+      # - name: Upload server
+      #   env:
+      #     API_URL: ${{ secrets.API_URL }}
+      #     JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      #   run: |
+      #     timestamp=$(date +%s)
+      #     header=$(echo -n '{"alg":"HS256","typ":"JWT"}' | base64 | tr -d '=' | tr '/+' '_-')
+      #     payload=$(jq -n \
+      #       --arg sha "${{ github.sha }}" \
+      #       --arg repo "${{ github.repository }}" \
+      #       --arg time $timestamp \
+      #       --arg iat $timestamp \
+      #       --arg exp $((timestamp + 300)) \
+      #       '{"sha":$sha,"repository":$repo,"timestamp":$time,"iat":($iat|tonumber),"exp":($exp|tonumber)}' | base64 | tr -d '=' | tr '/+' '_-')
+      #     signature=$(echo -n "${header}.${payload}" | openssl dgst -binary -sha256 -hmac "${JWT_SECRET}" | base64 | tr -d '=' | tr '/+' '_-')
+      #     jwt="${header}.${payload}.${signature}"
+      #     echo "::add-mask::$jwt"
+      #     echo "::add-mask::$header"
+      #     echo "::add-mask::$payload"
+      #     echo "::add-mask::$signature"
+
+      #     curl -X POST $API_URL \
+      #       -H "Content-Type: application/json" \
+      #       -H "Authorization: Bearer $jwt" \
+      #       -d "$(jq -n \
+      #         --arg repo "${{ github.repository }}" \
+      #         --arg artifact_id "${{ needs.main.outputs.artifact-id }}" \
+      #         --arg artifact_url "${{ needs.main.outputs.artifact-url }}" \
+      #         --arg issue_num "${{ needs.main.outputs.issue-number }}" \
+      #         '{"repository":$repo,"artifact_id":$artifact_id,"artifact_url":$artifact_url,"issue_num":$issue_num}')"
 
   denied:
     needs: main
@@ -217,24 +223,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4.0.3
-        with:
-          node-version: 16
+      # - name: Use Node.js
+      #   uses: actions/setup-node@v4.0.3
+      #   with:
+      #     node-version: 16
 
-      - name: Cache node modules
-        uses: actions/cache@v4.0.2
-        id: cache
-        with:
-          path: node_modules
-          key: npm-packages-${{ hashFiles('./actions/package-lock.json') }}
+      # - name: Cache node modules
+      #   uses: actions/cache@v4.0.2
+      #   id: cache
+      #   with:
+      #     path: node_modules
+      #     key: npm-packages-${{ hashFiles('./actions/package-lock.json') }}
 
-      - name: Install Node Dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          cat ./actions/package.json > package.json
-          cat ./actions/package-lock.json > package-lock.json
-          npm ci
+      # - name: Install Node Dependencies
+      #   if: steps.cache.outputs.cache-hit != 'true'
+      #   run: |
+      #     cat ./actions/package.json > package.json
+      #     cat ./actions/package-lock.json > package-lock.json
+      #     npm ci
           
       - name: Add issue comment
         uses: ./actions/add-issue-comment

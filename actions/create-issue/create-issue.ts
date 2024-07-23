@@ -51,7 +51,7 @@ function run() {
         }).catch(() => {
             core.setFailed(`File Read error`);
         })
-    } catch (error) {
+    } catch (error:any) {
         core.setFailed(error.message);
     }
 }
