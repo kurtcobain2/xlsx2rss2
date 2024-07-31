@@ -2,10 +2,10 @@ name: Excel Upload Workflow
 
 on:
   push:
-    # branches:
-    #   - manager
-    paths:
-      - 'files/*.xlsx'
+    branches:
+      - manager
+    # paths:
+    #   - 'files/*.xlsx'
 
 permissions: 
   issues: write
@@ -15,8 +15,32 @@ env:
   TEMP_FOLDER_DATA: /tmp/xlsx2rss-data
 
 jobs:
-  main:
+  check-file:
     runs-on: ubuntu-latest
+
+    outputs:
+      check-file: ${{ steps.check-xlsx.outputs.check_file }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Check File
+        id: check-xlsx
+        run: |
+          xlsx_count=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | wc -l)
+          echo "xlsx_count=$xlsx_count" >> $GITHUB_OUTPUT
+          if [ "$xlsx_count" -eq 1 ]; then
+            echo "check_file=true" >> $GITHUB_OUTPUT
+          else
+            echo "check_file=false" >> $GITHUB_OUTPUT
+          fi
+
+  main:
+    needs: check-file
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    if: needs.check-file.outputs.check-file
     
     outputs:
       commit-files: ${{ steps.commit-file.outputs.files }}
