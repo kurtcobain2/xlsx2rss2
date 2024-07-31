@@ -19,29 +19,23 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      check-file: ${{ steps.check-xlsx.outputs.check_file }}
+      success: ${{ steps.check-file.outputs.success }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Check File
-        id: check-xlsx
-        run: |
-          xlsx_count=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | wc -l)
-          echo "$xlsx_count"
-          echo "xlsx_count=$xlsx_count" >> $GITHUB_OUTPUT
-          if [ "$xlsx_count" -eq 1 ]; then
-            echo "check_file=true" >> $GITHUB_OUTPUT
-          else
-            echo "check_file=false" >> $GITHUB_OUTPUT
-          fi
+        id: check-file
+        uses: ./actions/check-file
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
   main:
     needs: check-file
     runs-on: ubuntu-latest
     continue-on-error: false
-    if: needs.check-file.outputs.check-file
+    if: needs.check-file.outputs.success == 'true'
     
     outputs:
       commit-files: ${{ steps.commit-file.outputs.files }}

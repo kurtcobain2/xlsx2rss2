@@ -1,0 +1,16 @@
+name: 'Get Commit File'
+
+description: 'Get Commit File'
+
+inputs:
+  github-token:
+    description: 'Github token'
+    required: true
+
+outputs:
+  success:
+    description: 'boolean string of result check file ("true"/"false")'
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
