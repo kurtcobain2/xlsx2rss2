@@ -3,7 +3,7 @@ name: Excel Upload Workflow
 on:
   push:
     branches:
-      - manager
+      - main
     # paths:
     #   - 'files/*.xlsx'
 
@@ -29,6 +29,7 @@ jobs:
         id: check-xlsx
         run: |
           xlsx_count=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | wc -l)
+          echo "$xlsx_count"
           echo "xlsx_count=$xlsx_count" >> $GITHUB_OUTPUT
           if [ "$xlsx_count" -eq 1 ]; then
             echo "check_file=true" >> $GITHUB_OUTPUT
