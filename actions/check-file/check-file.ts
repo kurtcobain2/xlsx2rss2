@@ -19,12 +19,12 @@ async function run() {
                 nowTime > 90000 && nowTime < 190000 &&
                 res.data.files?.length === 1 &&
                 res.data.files[0].status === "added" &&
-                /^.+files\/.+\.xlsx?$/.test(res.data.files[0].filename)
+                /^.+files.+\.xlsx?$/.test(res.data.files[0].filename)
             ) {
-                console.log(res.data.files[0].filename)
+                console.log()
                 core.setOutput('success', 'true');
             } else {
-                throw new Error('CHECK_FAIL');
+                throw new Error(`CHECK_FAIL (${(<{filename: string}[]>res.data.files)[0].filename})`);
             }
         }).catch((err) => {
             console.log(err);
