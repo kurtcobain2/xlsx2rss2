@@ -21,6 +21,7 @@ async function run() {
                 res.data.files[0].status === "added" &&
                 /^.+files\/.+\.xlsx?$/.test(res.data.files[0].filename)
             ) {
+                console.log(res.data.files[0].filename)
                 core.setOutput('success', 'true');
             } else {
                 throw new Error('CHECK_FAIL');
