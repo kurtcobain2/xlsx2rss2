@@ -7,7 +7,7 @@ async function run() {
         const TOKEN = core.getInput('github-token');
         const octokit = github.getOctokit(TOKEN);
 
-        let nowTime = Number(moment().format('HHmmss'))
+        let nowTime = Number(moment().utcOffset('+09:00').format('HHmmss'))
         
         octokit.rest.repos.getCommit({
             owner: github.context.repo.owner,
@@ -25,7 +25,7 @@ async function run() {
             } else {
                 console.log(nowTime);
                 console.log(res.data.files);
-                throw new Error(`CHECK_FAIL (${(<{filename: string}[]>res.data.files)[0].filename})`);
+                throw new Error(`CHECK_FAIL`);
             }
         }).catch((err) => {
             console.log(err);

@@ -34932,7 +34932,7 @@ function run() {
         try {
             const TOKEN = core.getInput('github-token');
             const octokit = github.getOctokit(TOKEN);
-            let nowTime = Number((0, moment_1.default)().format('HHmmss'));
+            let nowTime = Number((0, moment_1.default)().utcOffset('+09:00').format('HHmmss'));
             octokit.rest.repos.getCommit({
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
@@ -34949,7 +34949,7 @@ function run() {
                 else {
                     console.log(nowTime);
                     console.log(res.data.files);
-                    throw new Error(`CHECK_FAIL (${res.data.files[0].filename})`);
+                    throw new Error(`CHECK_FAIL`);
                 }
             }).catch((err) => {
                 console.log(err);
