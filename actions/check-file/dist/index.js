@@ -34943,10 +34943,11 @@ function run() {
                 if (nowTime > 80000 && nowTime < 190000 &&
                     ((_a = res.data.files) === null || _a === void 0 ? void 0 : _a.length) === 1 &&
                     res.data.files[0].status === "added" &&
-                    /^.+files.+\.xlsx?$/.test(res.data.files[0].filename)) {
+                    /^files\/.+\.xlsx?$/.test(res.data.files[0].filename)) {
                     core.setOutput('success', 'true');
                 }
                 else {
+                    console.log(nowTime);
                     console.log(res.data.files);
                     throw new Error(`CHECK_FAIL (${res.data.files[0].filename})`);
                 }
