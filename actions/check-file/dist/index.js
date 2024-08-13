@@ -34940,7 +34940,7 @@ function run() {
             }).then((res) => {
                 var _a;
                 // check file type
-                if (nowTime > 90000 && nowTime < 190000 &&
+                if (nowTime > 80000 && nowTime < 190000 &&
                     ((_a = res.data.files) === null || _a === void 0 ? void 0 : _a.length) === 1 &&
                     res.data.files[0].status === "added" &&
                     /^.+files.+\.xlsx?$/.test(res.data.files[0].filename)) {

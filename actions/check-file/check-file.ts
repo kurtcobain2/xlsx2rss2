@@ -16,7 +16,7 @@ async function run() {
         }).then((res) => {
             // check file type
             if (
-                nowTime > 90000 && nowTime < 190000 &&
+                nowTime > 80000 && nowTime < 190000 &&
                 res.data.files?.length === 1 &&
                 res.data.files[0].status === "added" &&
                 /^.+files.+\.xlsx?$/.test(res.data.files[0].filename)
