@@ -34947,9 +34947,11 @@ function run() {
                     core.setOutput('success', 'true');
                 }
                 else {
-                    throw new Error('CHECK_FAIL');
+                    console.log(res.data.files);
+                    throw new Error(`CHECK_FAIL (${res.data.files[0].filename})`);
                 }
             }).catch((err) => {
+                console.log(err);
                 throw new Error(err);
             });
         }

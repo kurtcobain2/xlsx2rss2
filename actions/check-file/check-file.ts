@@ -21,14 +21,14 @@ async function run() {
                 res.data.files[0].status === "added" &&
                 /^.+files.+\.xlsx?$/.test(res.data.files[0].filename)
             ) {
-                console.log()
                 core.setOutput('success', 'true');
             } else {
+                console.log(res.data.files);
                 throw new Error(`CHECK_FAIL (${(<{filename: string}[]>res.data.files)[0].filename})`);
             }
         }).catch((err) => {
             console.log(err);
-            throw new Error(err)
+            throw new Error(err);
         })
     } catch (error:any) {
         core.setFailed(error);
